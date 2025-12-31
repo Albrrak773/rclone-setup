@@ -1,13 +1,15 @@
 #!/bin/bash
 set -uo pipefail
-source ./paths.sh
 
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+echo "Script directory: $SCRIPT_DIR"
 REMOTE_DIR="Rclone"
 RCLONE_REMOTE_NAME="rclone"
 REMOTE_PATH="$RCLONE_REMOTE_NAME:$REMOTE_DIR"
-EXCLUDE_FILE="excludes.txt"
+EXCLUDE_FILE="$SCRIPT_DIR/excludes.txt"
 LOG_FILE="$XDG_RUNTIME_DIR/rclone-job.log"
 LOCK_FILE="$XDG_RUNTIME_DIR/rclone-job.lock"
+source "$SCRIPT_DIR/paths.sh"
 
 # this line clears the logs, and creates it if not exists!
 > "$LOG_FILE"
