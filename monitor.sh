@@ -1,4 +1,3 @@
-
 if ! command -v lnav &> /dev/null; then
     echo "'lnav' is not installed. Please install it using your package manager or visit https://lnav.org/downloads"
     exit 1
@@ -13,4 +12,5 @@ if ! command -v zellij &> /dev/null; then
 fi
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
-zellij --layout "$SCRIPT_DIR/status.kdl"
+export SCRIPT_DIR
+zellij --layout "$SCRIPT_DIR/zellij-monitor.kdl"

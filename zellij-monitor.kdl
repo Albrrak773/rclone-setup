@@ -4,11 +4,14 @@ layout {
     }
     pane split_direction="vertical" {
         pane command="lnav" {
+            name "Rclone logs"
             args "/tmp/rclone-job.log"
         }
-        pane command="btop"
+        pane command="sh" {
+            args "-c" "btop -f job.sh --config \"$SCRIPT_DIR/btop-monitor.conf\""
+        }
     }
     pane size=1 borderless=true command="sh" {
-      args "-c" "echo '  [!] TIP: Press Ctrl + q to exit this session'; sleep infinity"
+        args "-c" "printf 'Use CTRL+Q to quit'; sleep infinity"
     }
 }
