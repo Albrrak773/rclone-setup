@@ -1,8 +1,8 @@
 #!/bin/bash
 set -uo pipefail
+trap "kill 0" EXIT # kill all subprocesses (rclone) on exit
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
-echo "Script directory: $SCRIPT_DIR"
 REMOTE_DIR="Rclone"
 RCLONE_REMOTE_NAME="rclone"
 REMOTE_PATH="$RCLONE_REMOTE_NAME:$REMOTE_DIR"
@@ -10,6 +10,13 @@ EXCLUDE_FILE="$SCRIPT_DIR/excludes.txt"
 LOG_FILE="/tmp/rclone-job.log"
 LOCK_FILE="/tmp/rclone-job.lock"
 source "$SCRIPT_DIR/paths.sh"
+
+# lock file handling
+exec 200> "$LOCK_FILE"
+if ! flock -n 200; then
+  echo -e "\033[31mAnother instance of the script is running. Exiting.\033[0m"
+  exit 1
+fi
 
 # this line clears the logs, and creates it if not exists!
 > "$LOG_FILE"
@@ -43,15 +50,9 @@ function print_header {
   printf '\n'; printf '=%.0s' {1..20}; printf "[$dir]"; printf '=%.0s' {1..20}; printf '\n' >> "$LOG_FILE"
 }
 
-# lock file handling
-exec 200> "$LOCK_FILE"
-if ! flock -n 200; then
-  echo "Another instance of the script is running. Exiting."
-  exit 1
-fi
 
 # syncs
-echo "Starting syncs..."
+echo -e "\033[32mStarting syncs...\033[0m"
 for dir in "${!syncs[@]}"; do
   print_header && print_header >> "$LOG_FILE"
   rclone sync "${syncs[$dir]}" "$REMOTE_PATH/$dir" "${RCLONE_FLAGS[@]}"
