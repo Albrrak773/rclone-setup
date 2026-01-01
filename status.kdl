@@ -1,0 +1,14 @@
+layout {
+    default_tab_template {
+        children
+    }
+    pane split_direction="vertical" {
+        pane command="lnav" {
+            args "/tmp/rclone-job.log"
+        }
+        pane command="btop"
+    }
+    pane size=1 borderless=true command="sh" {
+      args "-c" "echo '  [!] TIP: Press Ctrl + q to exit this session'; sleep infinity"
+    }
+}
