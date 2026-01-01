@@ -40,23 +40,23 @@ RCLONE_FLAGS=(
 )
 
 function print_status {
-  if [ $? -eq 0 ]; then
-    echo "completed successfully ✅"
+  if [ $1 -eq 0 ]; then
+    echo "$2 completed successfully ✅"
   else
-    echo "something went wrong ❌"
+    echo "$2 did not complete successfully ❌"
+    echo "exit code : $1"
   fi
 }
 function print_header {
-  printf '\n'; printf '=%.0s' {1..20}; printf "[$dir]"; printf '=%.0s' {1..20}; printf '\n' >> "$LOG_FILE"
+  printf '\n'; printf '=%.0s' {1..20}; printf "[$1]"; printf '=%.0s' {1..20}; printf '\n'
 }
-
 
 # syncs
 echo -e "\033[32mStarting syncs...\033[0m"
 for dir in "${!syncs[@]}"; do
-  print_header && print_header >> "$LOG_FILE"
+  print_header "$dir" && print_header "$dir" >> "$LOG_FILE"
   rclone sync "${syncs[$dir]}" "$REMOTE_PATH/$dir" "${RCLONE_FLAGS[@]}"
-  print_status
+  print_status $? "$dir"
 done
 
 # backups
