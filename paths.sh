@@ -1,7 +1,7 @@
 #!/bin/bash
 declare -A syncs=(
     # sync
-    ["Gsync"]="/run/media/albrrak773/colorful SSD/Rclone/Gsync"
+    ["Gsync"]="/run/media/albrrak773/colorful SSD/Rclone"
 
     # media (legally obtained ofcourse)
     ["Movies"]="/run/media/albrrak773/2T External Disk/Movies"
