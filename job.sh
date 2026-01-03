@@ -55,14 +55,15 @@ function print_header {
 echo -e "\033[32mStarting syncs...\033[0m"
 for dir in "${!syncs[@]}"; do
   print_header "$dir" && print_header "$dir" >> "$LOG_FILE"
+  dir_path=${syncs[$dir]}
 
-  if [ ! -d $dir ]; then
-    echo "The directory '$dir'"
-    echo "Cound not be found, skipping ⏩"
+  if [ ! -d "$dir_path" ]; then
+    echo "The directory '$dir_path'"
+    echo "Was not be found, skipping ⏩"
     continue
   fi
 
-  rclone sync "${syncs[$dir]}" "$REMOTE_PATH/$dir" "${RCLONE_FLAGS[@]}"
+  rclone sync "$dir_path" "$REMOTE_PATH/$dir" "${RCLONE_FLAGS[@]}"
   print_status $? "$dir"
 done
 
@@ -70,13 +71,14 @@ done
 echo "Starting backups..."
 for dir in "${!backups[@]}"; do
   print_header "$dir" && print_header "$dir" >> "$LOG_FILE"
+  dir_path=${syncs[$dir]}
 
-  if [ ! -d $dir ]; then
-    echo "The directory '$dir'"
-    echo "Cound not be found, skipping ⏩"
+  if [ ! -d "$dir_path" ]; then
+    echo "The directory '$dir_path'"
+    echo "Was not be found, skipping ⏩"
     continue
   fi
 
-  rclone copy "${backups[$dir]}" "$REMOTE_PATH/$dir" "${RCLONE_FLAGS[@]}"
+  rclone copy "$dir_path" "$REMOTE_PATH/$dir" "${RCLONE_FLAGS[@]}"
   print_status
 done

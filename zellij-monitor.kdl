@@ -8,6 +8,7 @@ layout {
             args "/tmp/rclone-job.log"
         }
         pane command="sh" {
+            name "job and upload speed monitor"
             args "-c" "btop -f job.sh --config \"$SCRIPT_DIR/btop-monitor.conf\""
         }
     }
