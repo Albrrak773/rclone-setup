@@ -12,3 +12,4 @@ out/**
 .next/**
 playground/**
 .env
+jellyfin/cache/**
